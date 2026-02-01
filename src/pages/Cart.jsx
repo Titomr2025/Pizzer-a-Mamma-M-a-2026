@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
+import { UserContext } from '../context/UserContext';
 
 const Cart = () => {
   const { cart, increaseQuantity, decreaseQuantity, removeFromCart } = useContext(CartContext);
+  const { token } = useContext(UserContext);
   const formatPrice = (price) => {
     return price.toLocaleString();
   };
@@ -48,6 +50,7 @@ const Cart = () => {
           )}
           <div className="mt-4 text-end">
             <h4>Total: ${formatPrice(total)}</h4>
+            <button className="btn btn-success mt-2" disabled={!token}>Pagar</button>
           </div>
         </div>
       </div>

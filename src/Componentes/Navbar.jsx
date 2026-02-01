@@ -1,9 +1,11 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { CartContext } from '../context/CartContext'
+import { UserContext } from '../context/UserContext'
 
 const Navbar = () => {
   const { cart } = useContext(CartContext);
+  const { token, logout } = useContext(UserContext);
   const total = cart.reduce((sum, item) => sum + item.price * item.count, 0);
 
   const formatPrice = (price) => {
@@ -22,18 +24,29 @@ const Navbar = () => {
             <span className="d-none d-sm-inline">🍕 Home</span>
             <span className="d-sm-none">🍕</span>
           </Link>
-          <Link to="/profile" className="btn btn-outline-light btn-sm me-1 text-decoration-none">
-            <span className="d-none d-sm-inline">🔓 Profile</span>
-            <span className="d-sm-none">🔓</span>
-          </Link>
-          <Link to="/login" className="btn btn-outline-light btn-sm me-1 text-decoration-none">
-            <span className="d-none d-sm-inline">🔐 Login</span>
-            <span className="d-sm-none">🔐</span>
-          </Link>
-          <Link to="/register" className="btn btn-outline-light btn-sm me-1 text-decoration-none">
-            <span className="d-none d-sm-inline">🔐 Register</span>
-            <span className="d-sm-none">🔐</span>
-          </Link>
+          {token ? (
+            <>
+              <Link to="/profile" className="btn btn-outline-light btn-sm me-1 text-decoration-none">
+                <span className="d-none d-sm-inline">🔓 Profile</span>
+                <span className="d-sm-none">🔓</span>
+              </Link>
+              <button className="btn btn-outline-light btn-sm me-1 text-decoration-none" onClick={logout}>
+                <span className="d-none d-sm-inline">🚪 Logout</span>
+                <span className="d-sm-none">🚪</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="btn btn-outline-light btn-sm me-1 text-decoration-none">
+                <span className="d-none d-sm-inline">🔐 Login</span>
+                <span className="d-sm-none">🔐</span>
+              </Link>
+              <Link to="/register" className="btn btn-outline-light btn-sm me-1 text-decoration-none">
+                <span className="d-none d-sm-inline">🔐 Register</span>
+                <span className="d-sm-none">🔐</span>
+              </Link>
+            </>
+          )}
         </div>
         <Link to="/cart" className="btn btn-outline-info btn-sm text-decoration-none">
           <span className="d-none d-sm-inline">🛒 Total: ${formatPrice(total)}</span>
@@ -41,7 +54,7 @@ const Navbar = () => {
         </Link>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
