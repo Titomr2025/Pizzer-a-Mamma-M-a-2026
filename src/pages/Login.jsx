@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  const { login, error } = useContext(UserContext);
 
   const handleChange = (e) => {
     setFormData({
@@ -26,7 +28,7 @@ const Login = () => {
       return;
     }
 
-    alert('¡Login exitoso!');
+    login(formData.email, formData.password);
     
     setFormData({
       email: '',
@@ -53,6 +55,7 @@ const Login = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Ingresa tu email"
+                    required
                   />
                 </div>
 
@@ -66,8 +69,11 @@ const Login = () => {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Ingresa tu contraseña"
+                    required
                   />
                 </div>
+
+                {error && <div className="alert alert-danger">{error}</div>}
 
                 <div className="d-grid">
                   <button type="submit" className="btn btn-primary">

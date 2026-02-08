@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../Componentes/Header';
 import CardPizza from '../Componentes/CardPizza';
-import { pizzas } from '../Componentes/pizzas';
 
 const Home = () => {
+  const [pizzas, setPizzas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost:5002/api/pizzas')
+      .then((res) => {
+        if (!res.ok) throw new Error('Error al obtener las pizzas');
+        return res.json();
+      })
+      .then((data) => setPizzas(data))
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <div>Cargando pizzas...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
     <div className="main-content">
       <Header img="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"></Header>

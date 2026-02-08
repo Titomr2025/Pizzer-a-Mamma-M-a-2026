@@ -9,6 +9,7 @@ import Register from './pages/Register'
 import Pizza from './pages/Pizza'
 import Profile from './pages/Profile'
 import NotFound from './pages/NotFound'
+import { ProtectedRoute, PublicOnlyRoute } from './context/ProtectedRoute'
 
 const App = () => {
   return (
@@ -18,11 +19,23 @@ const App = () => {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={
+              <PublicOnlyRoute>
+                <Register />
+              </PublicOnlyRoute>
+            } />
+            <Route path="/login" element={
+              <PublicOnlyRoute>
+                <Login />
+              </PublicOnlyRoute>
+            } />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/pizza/p001" element={<Pizza />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/pizza/:id" element={<Pizza />} />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
             <Route path="/*" element={<NotFound />} />
           </Routes>
         </main>
